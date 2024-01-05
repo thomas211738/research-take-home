@@ -1,5 +1,6 @@
-version: v1.8.3
-sha: 885604c
-tag: v1.8.3
+version: v1.9.0
+sha: 6dc8adb
+build: "166"
+tag: v1.9.0
 branch: main
-time: "2023-10-15T06:24:53Z"
+time: "2024-01-01T08:11:38Z"

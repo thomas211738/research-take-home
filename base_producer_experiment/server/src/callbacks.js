@@ -2,101 +2,57 @@ import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 
 Empirica.onGameStart(({ game }) => {
-
-  const round0 = game.addRound({
-    name: "Advertise",
-    task: "advertise",
+  const round = game.addRound({
+    name: "Round 1 - Jelly Beans",
+    task: "jellybeans",
   });
-  round0.addStage({ name: "advertiseProduct", duration: 240 });
-
-  const round1 = game.addRound({
-    name: "Results",
-    task: "results",
-  });
-  round1.addStage({ name: "Result", duration: 140 });
+  round.addStage({ name: "Answer", duration: 300 });
+  round.addStage({ name: "Result", duration: 120 });
 
   const round2 = game.addRound({
-    name: "Advertise",
-    task: "advertise2",
+    name: "Round 2 - Minesweeper",
+    task: "minesweeper",
   });
-  round2.addStage({ name: "advertiseProduct", duration: 240 });
-  
-  const round3 = game.addRound({
-    name: "Results",
-    task: "results2",
-  });
-  round3.addStage({ name: "Result", duration: 140 });
-
-  const round4 = game.addRound({
-    name: "Advertise",
-    task: "advertise3",
-  });
-  round4.addStage({ name: "advertiseProduct", duration: 240 });
-  
-  const round5 = game.addRound({
-    name: "Results",
-    task: "results3",
-  });
-  round5.addStage({ name: "Result", duration: 140 });
-
-  const round6 = game.addRound({
-    name: "Advertise",
-    task: "advertise4",
-  });
-  round6.addStage({ name: "advertiseProduct", duration: 240 });
-  
-  const round7 = game.addRound({
-    name: "Game Results",
-    task: "results4",
-  });
-  round7.addStage({ name: "Result", duration: 140 });
-
+  round2.addStage({ name: "Play", duration: 300 });
 });
 
 Empirica.onRoundStart(({ round }) => {});
 
-Empirica.onStageStart(({ stage }) => {
-  // calculateAdvertiserScore(stage);
-});
+Empirica.onStageStart(({ stage }) => {});
 
-Empirica.onStageEnded(({ stage }) => {});
+Empirica.onStageEnded(({ stage }) => {
+  calculateJellyBeansScore(stage);
+});
 
 Empirica.onRoundEnded(({ round }) => {});
 
 Empirica.onGameEnded(({ game }) => {});
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+// Note: this is not the actual number of beans in the pile, it's a guess...
+const jellyBeansCount = 634;
 
-function calculateAdvertiserScore(stage) {
+function calculateJellyBeansScore(stage) {
   if (
-    stage.get("name") !== "Advertise" ||
-    stage.round.get("task") !== "advertise" ||
-    stage.get("name") !== "Advertise Again" ||
-    stage.round.get("task") !== "advertiseAgain"
+    stage.get("name") !== "Answer" ||
+    stage.round.get("task") !== "jellybeans"
   ) {
     return;
   }
 
   for (const player of stage.currentGame.players) {
-    console.log('calculating advertiser score')
-    let adQuality = player.get("adQuality")
-    let salesCount = 0
-    let randomDraw = 0
-    if (adQuality == "extraordinary") {
-      randomDraw = getRandomInt(100)
-      salesCount = randomDraw * 15;
-    } {
-      let randomDraw = getRandomInt(100)
-      salesCount = randomDraw * 10;
+    let roundScore = 0;
+
+    const playerGuess = player.round.get("guess");
+
+    if (playerGuess) {
+      const deviation = Math.abs(playerGuess - jellyBeansCount);
+      const score = Math.round((1 - deviation / jellyBeansCount) * 10);
+      roundScore = Math.max(0, score);
     }
 
-    player.set("numBuyers", randomDraw);
+    player.round.set("score", roundScore);
 
-    let totalScore = player.get("score") || 0;
-    player.set("salesCount", salesCount);
-    player.set("score", totalScore + salesCount);
-    player.set("scoreUpdated", true)
+    const totalScore = player.get("score") || 0;
+    player.set("score", totalScore + roundScore);
   }
 }

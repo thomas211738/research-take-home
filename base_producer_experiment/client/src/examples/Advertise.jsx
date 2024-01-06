@@ -18,6 +18,9 @@ import {
     function handleChange() {
       console.log("something happened");
     }
+    function handleChangeSlider(e) {
+      player.round.set("guess", e.target.valueAsNumber);
+    }
     function handleSubmit() {
       console.log("Player.stage set to true");
 
@@ -89,8 +92,8 @@ import {
 
         </div>
 
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         <h1><b>You are a producer of toothpaste</b></h1>
           <h1><b>Choose what to produce.</b> All your products this round will be the quality you select. <br/> Your current choice is to produce: <b>{player.round.get("productionQuality")} </b> quality toothspaste.</h1>
           <div className="flex justify-center space-x-4"> {/* This flex container will lay out its children (products) in a row */}
@@ -107,6 +110,26 @@ import {
           <AdvertisementAlternative title="Standard Toothpaste (low quality)"  quality="low" imageUrl={"url(/images/toothpastestandard.jpg)"} on_button_click={(e) => handleAdverisementChoice(e, "low")}/>
           <AdvertisementAlternative title="Amazing Toothpaste (high quality)"  quality="high" imageUrl={"url(/images/toothpaseamazing.jpg)"} on_button_click={(e) => handleAdverisementChoice(e, "high")}/>
         </div>
+
+        <br/><br/><br/><br/><br/>
+
+        <h1><b>Choose a warrant amount for your product</b></h1>
+
+        <p> A warrant increases the probability of aquiring more customers.</p>
+        <p> <b>Note:</b> if your product quality is different than the advertised quality, you <br/>have to pay each customer that challenged the warrant by the warrany amount </p>
+
+        <p> Current warrant amount: </p>
+
+        <Slider
+          value={player.round.get("guess")}
+          onChange={handleChangeSlider}
+          disabled={false}
+          max={100}
+        />
+
+
+
+
         <br/><br/><br/><br/><br/>
           <h1><b>Choose the price for your product</b></h1>
 

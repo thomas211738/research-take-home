@@ -13,6 +13,8 @@ export function SalesResults({roundNumber}) {
   const advertisementQuality = player.get(roundNumberText.concat("_choices"))[1]
   const priceOfProduct = player.get(roundNumberText.concat("_choices"))[2]
   const productionCost = player.get(roundNumberText.concat("_choices"))[3]
+  const warrantAmount = player.get(roundNumberText.concat("_choices"))[4]
+
   let imageUrl = "";
   //console.log('roundNumberText', roundNumberText)
   if (advertisementQuality === "high") {
@@ -26,7 +28,7 @@ export function SalesResults({roundNumber}) {
   //let points = 10;
   let points = priceOfProduct
 
-  const min = 10;
+  const min = 10 + warrantAmount;
   const max = 90;
   
   //  switch (advertisementQuality){
@@ -36,11 +38,21 @@ export function SalesResults({roundNumber}) {
   //    case "low":
   //      switch (priceOfProduct) {case "high": min =10, max=20; break; case "low": min = 50, max = 80; break;}
   //  }
-  const numBuyers = Math.floor((Math.random() * (max - min ) + min)) ;
+  const numBuyers = Math.floor((Math.random() * (max - min ) + min));
+  let warrantChallenges = 0;
+  if (productionQuality !== advertisementQuality){
+    warrantChallenges = Math.ceil((Math.random() * (0.2 - 0.01)) * numBuyers);
+  }
+
+  const warrantPayement = warrantAmount * warrantChallenges;
 
 
   const salesCount = numBuyers * (priceOfProduct - productionCost);
-  const finalScore = currentScore + salesCount
+  const score = salesCount - warrantPayement;
+
+  const finalScore = currentScore + score;
+  
+
 
   function handleSubmit() {
     console.log('Moving on from results round');
@@ -73,8 +85,10 @@ export function SalesResults({roundNumber}) {
         <p> 
           You earned ${priceOfProduct - productionCost}  per product x {numBuyers} units sold = {salesCount} points in sales.
         </p><br/>
-        <p> Your score for this round is: {salesCount} </p>
-        <p> Your total score is: {salesCount + currentScore} </p><br/>
+        <p> You also had {warrantChallenges} warrant challenges, paying each challenge {warrantAmount} so you payed a total of {warrantPayement} </p><br/>
+        <p> Therefore, your total earnings are {salesCount} -  {warrantPayement} = {score} </p><br/>
+        <p> Your score for this round is: {score} </p>
+        <p> Your total score is: {score + currentScore} </p><br/>
         <p> 
           Click to proceed to the next round to sell products in this marketplace.
         </p>

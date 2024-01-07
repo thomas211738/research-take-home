@@ -19,7 +19,7 @@ import {
       console.log("something happened");
     }
     function handleChangeSlider(e) {
-      player.round.set("guess", e.target.valueAsNumber);
+      player.round.set("warrantAmount", e.target.valueAsNumber);
     }
     function handleSubmit() {
       console.log("Player.stage set to true");
@@ -28,7 +28,9 @@ import {
       [player.round.get("productionQuality"),
       player.round.get("advertisementQuality"),
       player.round.get("priceOfProduct"),
-      player.round.get("productionCost")])
+      player.round.get("productionCost"),
+      player.round.get("warrantAmount")
+    ])
 
       player.stage.set("submit", true);//player.stage.submit();
     }
@@ -121,7 +123,7 @@ import {
         <p> Current warrant amount: {player.round.get('guess')}</p>
 
         <Slider
-          value={player.round.get("guess") || 0}
+          value={player.round.get("warrantAmount") || 0}
           onChange={handleChangeSlider}
           disabled={false}
           max={100}

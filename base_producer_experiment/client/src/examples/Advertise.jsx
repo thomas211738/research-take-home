@@ -118,10 +118,10 @@ import {
         <p> A warrant increases the probability of aquiring more customers.</p>
         <p> <b>Note:</b> if your product quality is different than the advertised quality, you <br/>have to pay each customer that challenged the warrant by the warrany amount </p>
 
-        <p> Current warrant amount: </p>
+        <p> Current warrant amount: {player.round.get('guess')}</p>
 
         <Slider
-          value={player.round.get("guess")}
+          value={player.round.get("guess") || 0}
           onChange={handleChangeSlider}
           disabled={false}
           max={100}
